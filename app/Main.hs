@@ -1,8 +1,9 @@
 module Main where
 
-import System.Directory as D
+import           Data.Foldable    as F
+import           System.Directory as D
 
 main :: IO ()
 main = do
   files <- D.listDirectory "."
-  print files
+  F.for_ files putStrLn
