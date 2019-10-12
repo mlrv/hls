@@ -36,6 +36,7 @@ executables:
     dependencies:
     - hls
     - directory
+    - optparse-applicative
 
 tests:
   hls-test:
