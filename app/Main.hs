@@ -1,3 +1,5 @@
+{-# LANGUAGE ViewPatterns #-}
+
 module Main where
 
 import           Data.Foldable    as F
@@ -21,4 +23,17 @@ putFileInfoLn :: FileInfo -> IO ()
 putFileInfoLn = putStrLn . renderFileInfo
 
 renderFileInfo :: FileInfo -> String
-renderFileInfo file = _filename file ++ ", " ++ show (_size file) ++ "B"
+renderFileInfo file
+  | _isdir file = _filename file ++ " dir"
+renderFileInfo file
+  | _size file >= 1024 =
+    _filename file ++ " " ++ show (_size file `div` 1024) ++ "KB"
+renderFileInfo file = _filename file ++ " " ++ show (_size file) ++ "B"
+
+prettySize :: Integer -> String
+prettySize (prefixify -> (s, p)) = show s ++ " " ++ p ++ "B"
+
+prefixify :: Integer -> (Integer, String)
+prefixify s
+  | s >= 1024 = (s `div` 1024, "K")
+prefixify s = (s, "")
