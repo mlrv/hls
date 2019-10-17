@@ -8,3 +8,9 @@ data FileInfo =
     , _size     :: Integer
     , _isdir    :: Bool
     }
+
+data Options =
+  Options
+    { _path :: String
+    , _long :: Bool
+    }
