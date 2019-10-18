@@ -15,11 +15,10 @@ main = do
   D.setCurrentDirectory (_path opts)
   files <- D.listDirectory "."
   files' <- elaborateFiles files
-
-  let printer = case _long opts of
-                     True -> putFileInfoLn
-                     False -> putStrLn . _filename
-
+  let printer =
+        if _long opts
+          then putFileInfoLn
+          else putStrLn . _filename
   F.for_ files' printer
 
 elaborateFiles :: [FilePath] -> IO [FileInfo]
@@ -48,8 +47,8 @@ prefixify s = (s, "")
 
 cliParser :: O.Parser Options
 cliParser =
-	Options <$> O.strArgument (O.metavar "PATH" <> O.value ".")
-	        <*> O.switch (long "long" <> short 'l' <> help "Enable long output")
+  Options <$> O.strArgument (O.metavar "PATH" <> O.value ".") <*>
+  O.switch (long "long" <> short 'l' <> help "Enable long output")
 
 cliParserInfo :: O.ParserInfo Options
 cliParserInfo = O.info (O.helper <*> cliParser) mempty
